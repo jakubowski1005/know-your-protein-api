@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,4 +36,7 @@ public class User {
     @NonNull
     @Size(min = 6)
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+    private List<SpectrumData> spectras = new ArrayList<>();
 }
