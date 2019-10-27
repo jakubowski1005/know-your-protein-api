@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Data
 @AllArgsConstructor
-public abstract class ServerResponse {
+public class ServerResponse {
 
     private HttpStatus http;
     private Boolean status;
