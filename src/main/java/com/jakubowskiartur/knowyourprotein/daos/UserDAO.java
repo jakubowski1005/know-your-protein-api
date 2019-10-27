@@ -38,6 +38,7 @@ public class UserDAO {
     public void updatePassword(UUID id, String password) {
         User user = retrieveUserByID(id);
         user.setPassword(password);
+        userRepository.save(user);
     }
 
 
