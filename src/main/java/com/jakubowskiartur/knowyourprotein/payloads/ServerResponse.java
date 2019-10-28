@@ -6,10 +6,10 @@ import org.springframework.http.HttpStatus;
 
 @Data
 @AllArgsConstructor
-public class ServerResponse {
+public class ServerResponse<T> {
 
     private HttpStatus http;
     private Boolean status;
     private String message;
-    private Object body;
+    private T body;
 }
