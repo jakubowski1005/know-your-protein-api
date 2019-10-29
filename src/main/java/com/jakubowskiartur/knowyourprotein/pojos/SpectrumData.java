@@ -6,14 +6,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
 @Data
-@AllArgsConstructor
-@RequiredArgsConstructor
+@Builder
 @NoArgsConstructor
 public class SpectrumData {
 
@@ -24,20 +23,23 @@ public class SpectrumData {
     @NonNull
     private String name;
 
-    //private Dataset orginalSpectrum;
+    @NonNull
+    private Dataset originalSpectrum;
 
-    //private Dataset derivative;
+    @NonNull
+    private Dataset amide;
 
-    //private Dataset amide;
+    @NonNull
+    private Dataset derivative;
 
-    //private List<SpectrumData> spectras = new ArrayList<>();
-
-    // private Structures data
+    @NonNull
+    private List<Map<String, Double>> structures;
 
     private LocalDate creationDate = LocalDate.now();
 
     @ManyToOne
     @ToString.Exclude
     @JsonIgnore
+    @NonNull
     private User user;
 }
