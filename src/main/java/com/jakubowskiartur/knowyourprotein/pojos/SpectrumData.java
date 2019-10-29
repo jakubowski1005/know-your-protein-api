@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Builder
+//@Builder
 @NoArgsConstructor
 public class SpectrumData {
 
@@ -35,7 +35,7 @@ public class SpectrumData {
     @NonNull
     private List<Map<String, Double>> structures;
 
-    private LocalDate creationDate = LocalDate.now();
+    private final LocalDate creationDate = LocalDate.now();
 
     @ManyToOne
     @ToString.Exclude
