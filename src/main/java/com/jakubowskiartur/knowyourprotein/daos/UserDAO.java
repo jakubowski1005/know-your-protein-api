@@ -4,10 +4,12 @@ import com.jakubowskiartur.knowyourprotein.pojos.User;
 import com.jakubowskiartur.knowyourprotein.repos.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.UUID;
 
+@Component
 @Slf4j
 public class UserDAO {
 
