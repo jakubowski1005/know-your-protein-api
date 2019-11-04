@@ -8,9 +8,11 @@ class HardcodedStructures {
     static Map<String, Range> structures = new HashMap<>();
 
     static {
-        structures.put("1", new Range(1615, 1620));
-        structures.put("2", new Range(1634, 1638));
-        structures.put("3", new Range(1655, 1660));
-        structures.put("4", new Range(1680, 1685));
+        structures.put("aggregated-strands", new Range(1610, 1628));
+        structures.put("beta-sheet", new Range(1629, 1640));
+        structures.put("unordered", new Range(1641, 1648));
+        structures.put("alpha-helix", new Range(1649, 1660));
+        structures.put("310-helix", new Range(1661, 1670));
+        structures.put("antiparallel beta-sheet", new Range(1675, 1695));
     }
 }

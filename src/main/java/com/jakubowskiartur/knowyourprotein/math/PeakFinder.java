@@ -7,22 +7,28 @@ import java.util.Map;
 
 public class PeakFinder {
 
-    public Dataset getSecondaryStructurePeaks(Dataset dataset) {
+    public double[] getSecondaryStructurePeaks(Dataset dataset) {
 
         double[] wavelengths = dataset.getX();
         double[] minimums = findMinimums(dataset);
+
+        for (int i = 0; i < minimums.length; i++) {
+            System.out.println(minimums[i]);
+        }
+
         double[] secondaryStructures = Arrays.stream(minimums).filter(this::isSecondaryStructure).toArray();
 
         List<Double> absorptionList = new ArrayList<>();
 
-        for (int i = 0; i < wavelengths.length; i++) {
-            if(secondaryStructures[i] == wavelengths[i]) {
-                absorptionList.add(secondaryStructures[i]);
+        for (int j = 0; j < secondaryStructures.length; j++) {
+            for (int i = 0; i < wavelengths.length; i++) {
+                if (secondaryStructures[j] == wavelengths[i]) {
+                    absorptionList.add(secondaryStructures[j]);
+                }
             }
         }
 
-        double[] absorption = absorptionList.stream().mapToDouble(Double::doubleValue).toArray();
-        return new Dataset(secondaryStructures, absorption);
+        return absorptionList.stream().mapToDouble(Double::doubleValue).toArray();
     }
 
     private boolean isSecondaryStructure(double wavelength) {
