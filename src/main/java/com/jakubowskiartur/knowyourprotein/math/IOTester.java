@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Map;
 
 public class IOTester {
 
@@ -86,17 +87,27 @@ public class IOTester {
 //        io.convertToCSV(smothedSpectra.get2DArray(), "prezka/smoothed");
 
         Dataset amide = BandSlicer.slice(smothedSpectra, 1600, 1700);
+
+        Dataset baseline = new BaselineCorrector().calculateBackground(amide);
+
+        Dataset substracted = new BaselineCorrector().substract(amide);
+
+        io.convertToCSV(substracted.get2DArray(), "prezka/correction");
+
+        io.convertToCSV(baseline.get2DArray(), "prezka/tlo");
 //        io.convertToCSV(amide.get2DArray(), "prezka/amide");
 
-        Dataset diff = Differentiation.diff(amide);
-        Dataset diff2 = Differentiation.diff(diff);
+//        Dataset diff = Differentiation.diff(amide);
+//        Dataset diff2 = Differentiation.diff(diff);
 //        io.convertToCSV(diff2.get2DArray(), "prezka/diff2");
 
-        double[] secondary = new PeakFinder().getSecondaryStructurePeaks(diff2);
-
-        for (int i = 0; i < secondary.length; i++) {
-            System.out.println(secondary[i]);
-        }
+//        double[] secondary = new PeakFinder().getSecondaryStructurePeaks(diff2);
+//
+//        Map<String, Double> mapp = new PeakFinder().getMeanPeakValues(secondary);
+//
+//        for (Map.Entry item: mapp.entrySet()) {
+//            System.out.println(item.getKey() + "    " + item.getValue());
+//        }
        // Dataset baseline = new SGFilter().smooth(amide);//new BaselineCorrector().correctBaseline(amide);
 
 
