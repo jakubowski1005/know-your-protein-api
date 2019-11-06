@@ -88,13 +88,11 @@ public class IOTester {
 
         Dataset amide = BandSlicer.slice(smothedSpectra, 1600, 1700);
 
-        Dataset baseline = new BaselineCorrector().calculateBackground(amide);
 
-        Dataset substracted = new BaselineCorrector().substract(amide);
+        Dataset substracted = new BaselineCorrector().subtract(amide);
 
         io.convertToCSV(substracted.get2DArray(), "prezka/correction");
 
-        io.convertToCSV(baseline.get2DArray(), "prezka/tlo");
 //        io.convertToCSV(amide.get2DArray(), "prezka/amide");
 
 //        Dataset diff = Differentiation.diff(amide);
