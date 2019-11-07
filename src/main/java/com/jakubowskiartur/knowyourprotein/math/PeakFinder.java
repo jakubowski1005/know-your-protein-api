@@ -4,7 +4,7 @@ import java.util.*;
 
 public class PeakFinder {
 
-    public Map<String, Double> getMeanPeakValues(double[] peaks) {
+    public double[] getMeanPeakValues(double[] peaks) {
 
         Map<String, Double> values = new HashMap<>();
 
@@ -55,7 +55,12 @@ public class PeakFinder {
         values.put("helix310", helix310/helix310Counter);
         values.put("antiparallelBetaSheet", antiparallelBetaSheet/antiparallelBetaSheetCounter);
 
-        return values;
+        double[] peakss =  values.values().stream().mapToDouble(Double::doubleValue).toArray();
+
+        for (int i = 0; i < peakss.length; i++) {
+            System.out.println(peakss[i]);
+        }
+        return peakss;
     }
 
     public double[] getSecondaryStructurePeaks(Dataset dataset) {
@@ -76,9 +81,9 @@ public class PeakFinder {
 
         double[] arr = absorptionList.stream().mapToDouble(Double::doubleValue).toArray();
 
-        for (int i = 0; i < arr.length; i++) {
-            System.out.println(arr[i]);
-        }
+//        for (int i = 0; i < arr.length; i++) {
+//            System.out.println(arr[i]);
+//        }
 
         return arr;
     }

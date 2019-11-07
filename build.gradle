@@ -26,6 +26,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'javax.inject:javax.inject:1'
 	compileOnly 'org.projectlombok:lombok'
+	compile group: 'org.apache.commons', name: 'commons-math3', version: '3.2'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'

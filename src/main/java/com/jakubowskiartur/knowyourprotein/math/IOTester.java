@@ -5,7 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class IOTester {
@@ -41,6 +43,47 @@ public class IOTester {
     }
 
     // convert dataset to csv file
+
+
+    public void createCSV(List<Dataset> data, String filename) throws IOException {
+
+        double[] wavelengths = data.get(0).getX();
+        double[] orginal = data.get(0).getY();
+        double[] component1 = data.get(1).getY();
+        double[] component2 = data.get(2).getY();
+        double[] component3 = data.get(3).getY();
+        double[] component4 = data.get(4).getY();
+        double[] component5 = data.get(5).getY();
+        double[] component6 = data.get(6).getY();
+
+        try {
+            BufferedWriter br = new BufferedWriter(new FileWriter("/Users/arturjakubowski/Desktop/" + filename + ".CSV"));
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i < wavelengths.length; i++) {
+                sb.append(wavelengths[i]);
+                sb.append(",");
+                sb.append(orginal[i]);
+                sb.append(",");
+                sb.append(component1[i]);
+                sb.append(",");
+                sb.append(component2[i]);
+                sb.append(",");
+                sb.append(component3[i]);
+                sb.append(",");
+                sb.append(component4[i]);
+                sb.append(",");
+                sb.append(component5[i]);
+                sb.append(",");
+                sb.append(component6[i]);
+                sb.append("\n");
+            }
+            br.write(sb.toString());
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void convertToCSV(double[][] data, String filename) throws IOException {
 
@@ -91,15 +134,69 @@ public class IOTester {
 
         Dataset substracted = new BaselineCorrector().subtract(amide);
 
-        io.convertToCSV(substracted.get2DArray(), "prezka/correction");
+
+        Dataset diff = Differentiation.diff(substracted);
+        Dataset diff2 = Differentiation.diff(diff);
+
+
+        double[] secondary = new PeakFinder().getSecondaryStructurePeaks(diff2);
+
+        double[] peaks = new PeakFinder().getMeanPeakValues(secondary);
+
+        Deconvolution deconvolution = new Deconvolution();
+
+        Dataset component1Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[0]);
+        Dataset component2Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[1]);
+        Dataset component3Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[2]);
+        Dataset component4Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[3]);
+        Dataset component5Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[4]);
+        Dataset component6Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[5]);
+
+        double[][] x = new double[substracted.getX().length][6];
+
+        for (int i = 0; i < x.length; i++) {
+            x[i][0] = component1Gauss.getY()[i];
+            x[i][1] = component2Gauss.getY()[i];
+            x[i][2] = component3Gauss.getY()[i];
+            x[i][3] = component4Gauss.getY()[i];
+            x[i][4] = component5Gauss.getY()[i];
+            x[i][5] = component6Gauss.getY()[i];
+        }
+
+        double[] coeffs = new MultiLinearRegression().doRegression(substracted.getY(), x);
+
+
+
+
+        List<Dataset> components = new ArrayList<>();
+        components.add(substracted);
+//        components.add(component1Gauss);
+//        components.add(component2Gauss);
+//        components.add(component3Gauss);
+//        components.add(component4Gauss);
+//        components.add(component5Gauss);
+//        components.add(component6Gauss);
+
+        for (int i = 0; i < peaks.length; i++) {
+            components.add(deconvolution.gaussianFit(substracted, peaks[i], coeffs[i]));
+        }
+
+
+        io.createCSV(components, "prezka/dane");
+
+//        Dataset component = new Deconvolution().gaussianFit(substracted, 1621);
+//
+//        io.convertToCSV(component.get2DArray(), "prezka/component1");
+
+
+//        io.convertToCSV(substracted.get2DArray(), "prezka/correction");
 
 //        io.convertToCSV(amide.get2DArray(), "prezka/amide");
 
-//        Dataset diff = Differentiation.diff(amide);
-//        Dataset diff2 = Differentiation.diff(diff);
+
 //        io.convertToCSV(diff2.get2DArray(), "prezka/diff2");
 
-//        double[] secondary = new PeakFinder().getSecondaryStructurePeaks(diff2);
+
 //
 //        Map<String, Double> mapp = new PeakFinder().getMeanPeakValues(secondary);
 //
