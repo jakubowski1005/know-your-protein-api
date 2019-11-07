@@ -47,7 +47,7 @@ Server-side part of application would be responsible for user account handling (
 - [X] Choose technologies, tools and libraries
 - [X] Project application structure
 - [X] Create repository and task list
-- [ ] Initialize project using Gradle and add needed dependencies
+- [X] Initialize project using Gradle and add needed dependencies
 - [ ] Implement data processing elements and tests
 - [ ] Implement data models, services and controllers with tests
 - [ ] Implement auth handling woth Spring Security, OAuth2 with JWT
