@@ -8,7 +8,7 @@ public class SpectrumAnalyzer {
 
     private DataValidator validator;
     private PeakFinder peakFinder;
-    // private deconvolution class
+    private Deconvolution deconvolution;
     private ResponseCreator creator;
 
     public ServerResponse<?> analyzeSpectrum(Dataset dataset) {

@@ -3,9 +3,9 @@ package com.jakubowskiartur.knowyourprotein.math;
 import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
 import org.springframework.http.HttpStatus;
 
-public class DataValidator {
+class DataValidator {
 
-    public ServerResponse<?> buildErrorResponse() {
+    ServerResponse<?> buildErrorResponse() {
 
         return ServerResponse.builder()
                 .http(HttpStatus.BAD_REQUEST)
@@ -15,7 +15,13 @@ public class DataValidator {
                 .build();
     }
 
-    public boolean isValid(Dataset dataset) {
+    boolean isValid(Dataset dataset) {
+
+        double[] x = dataset.getX();
+
+        for (int i = 1; i < x.length; i++) {
+            if(x[i-1] > x[i] || x[i] < 0) return false;
+        }
         return true;
     }
 }
