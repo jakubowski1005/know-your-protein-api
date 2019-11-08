@@ -1,18 +1,17 @@
 package com.jakubowskiartur.knowyourprotein.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jakubowskiartur.knowyourprotein.math.Dataset;
+import com.jakubowskiartur.knowyourprotein.math.StructureModel;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Entity
 @Data
-//@Builder
+@Builder
 @NoArgsConstructor
 public class SpectrumData {
 
@@ -24,16 +23,7 @@ public class SpectrumData {
     private String name;
 
     @NonNull
-    private Dataset originalSpectrum;
-
-    @NonNull
-    private Dataset amide;
-
-    @NonNull
-    private Dataset derivative;
-
-    @NonNull
-    private List<Map<String, Double>> structures;
+    private List<StructureModel> structures;
 
     private final LocalDate creationDate = LocalDate.now();
 
