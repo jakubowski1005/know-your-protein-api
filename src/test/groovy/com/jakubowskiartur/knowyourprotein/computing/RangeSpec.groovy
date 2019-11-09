@@ -1,5 +1,6 @@
-package com.jakubowskiartur.knowyourprotein.math
+package com.jakubowskiartur.knowyourprotein.computing
 
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Range
 import spock.lang.Specification
 
 class RangeSpec extends Specification {

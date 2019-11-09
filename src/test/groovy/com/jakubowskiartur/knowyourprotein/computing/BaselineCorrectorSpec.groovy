@@ -1,5 +1,7 @@
-package com.jakubowskiartur.knowyourprotein.math
+package com.jakubowskiartur.knowyourprotein.computing
 
+import com.jakubowskiartur.knowyourprotein.computing.quality.BaselineCorrector
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset
 import spock.lang.Specification
 
 class BaselineCorrectorSpec extends Specification {

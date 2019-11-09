@@ -1,7 +1,7 @@
 package com.jakubowskiartur.knowyourprotein.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jakubowskiartur.knowyourprotein.math.StructureModel;
+import com.jakubowskiartur.knowyourprotein.computing.pojos.StructureModel;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-//@Builder
+@Builder
 @NoArgsConstructor
 public class SpectrumData {
 

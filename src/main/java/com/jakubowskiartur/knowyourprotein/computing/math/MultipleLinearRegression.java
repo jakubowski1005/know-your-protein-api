@@ -1,10 +1,10 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.math;
 
 import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
 
-class MultipleLinearRegression {
+public class MultipleLinearRegression {
 
-    static double[] getParameters(double[] y, double[][] x) {
+    public static double[] getParameters(double[] y, double[][] x) {
 
         OLSMultipleLinearRegression regression = new OLSMultipleLinearRegression();
 

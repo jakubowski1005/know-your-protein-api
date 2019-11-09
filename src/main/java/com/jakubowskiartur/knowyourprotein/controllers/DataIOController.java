@@ -1,8 +1,6 @@
 package com.jakubowskiartur.knowyourprotein.controllers;
 
-import com.jakubowskiartur.knowyourprotein.math.Dataset;
-import com.jakubowskiartur.knowyourprotein.math.SpectrumAnalyzer;
-import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
+import com.jakubowskiartur.knowyourprotein.computing.SpectrumAnalyzer;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;

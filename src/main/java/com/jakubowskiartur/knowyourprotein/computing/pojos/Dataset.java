@@ -1,4 +1,4 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.pojos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class Dataset {
         return arr;
     }
 
-    static Dataset merge(double[] x, double[] y) {
+    public static Dataset merge(double[] x, double[] y) {
         if(x.length != y.length) throw new IllegalArgumentException("Arrays must have the same length");
         return new Dataset(x, y);
     }

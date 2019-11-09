@@ -1,10 +1,12 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.math;
+
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
 
 import java.util.Arrays;
 
-class BandSlicer {
+public class BandSlicer {
 
-    static Dataset slice(Dataset dataset, double from, double to) {
+    public static Dataset slice(Dataset dataset, double from, double to) {
 
         double[] wavelengths = dataset.getX();
         double[] values = dataset.getY();

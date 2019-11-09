@@ -1,13 +1,14 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.analyzing;
 
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
 import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-class DataValidator {
+public class DataValidator {
 
-    ServerResponse<?> buildErrorResponse() {
+    public ServerResponse<?> buildErrorResponse() {
 
         return ServerResponse.builder()
                 .http(HttpStatus.BAD_REQUEST)
@@ -17,7 +18,7 @@ class DataValidator {
                 .build();
     }
 
-    boolean isValid(Dataset dataset) {
+    public boolean isValid(Dataset dataset) {
 
         double[] x = dataset.getX();
 

@@ -1,5 +1,6 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.quality;
 
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
 import org.springframework.stereotype.Service;
 
 @Service

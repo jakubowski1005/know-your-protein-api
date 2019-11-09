@@ -1,11 +1,11 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.pojos;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class HardcodedStructures {
+public class HardcodedStructures {
 
-    static Map<String, Range> structures = new HashMap<>();
+    public static Map<String, Range> structures = new HashMap<>();
 
     static {
         structures.put("aggregated-strands", new Range(1610, 1628));

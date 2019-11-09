@@ -1,8 +1,10 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.math;
 
-class Differentiation {
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
 
-    static Dataset diff(Dataset dataset, int order) {
+public class Differentiation {
+
+    public static Dataset diff(Dataset dataset, int order) {
 
         if (order < 1) throw new IllegalArgumentException("Order must be higher than 0.");
 

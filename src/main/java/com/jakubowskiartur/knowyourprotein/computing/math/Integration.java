@@ -1,8 +1,10 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.math;
+
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
 
 public class Integration {
 
-    static double integrate(Dataset dataset) {
+    public static double integrate(Dataset dataset) {
 
         double[] y = dataset.getY();
         double area = 0;

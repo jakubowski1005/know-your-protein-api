@@ -1,5 +1,6 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.quality;
 
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -16,7 +17,7 @@ public class QualityEnhancer {
         this.corrector = corrector;
     }
 
-    Dataset enhanceQuality(Dataset dataset) {
+    public Dataset enhanceQuality(Dataset dataset) {
         Dataset filtered = filter.smooth(dataset);
         return corrector.subtract(filtered);
     }

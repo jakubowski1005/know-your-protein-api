@@ -1,5 +1,9 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.analyzing;
 
+import com.jakubowskiartur.knowyourprotein.computing.math.Differentiation;
+import com.jakubowskiartur.knowyourprotein.computing.pojos.HardcodedStructures;
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Range;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

@@ -1,5 +1,9 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.analyzing;
 
+import com.jakubowskiartur.knowyourprotein.computing.math.Integration;
+import com.jakubowskiartur.knowyourprotein.computing.math.MultipleLinearRegression;
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
+import com.jakubowskiartur.knowyourprotein.computing.pojos.StructureModel;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -8,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 @Service
-class Deconvolution {
+public class Deconvolution {
 
     private PeakFinder peakFinder;
 
@@ -17,7 +21,7 @@ class Deconvolution {
         this.peakFinder = peakFinder;
     }
 
-    List<StructureModel> deconvolve(Dataset dataset) {
+    public List<StructureModel> deconvolve(Dataset dataset) {
 
         Map<String, Double> structures = peakFinder.getSecondaryStructures(dataset);
         List<StructureModel> structureModels = new ArrayList<>();
@@ -77,13 +81,13 @@ class Deconvolution {
     }
 
     private double[][] rotate(double[][] array) {
-        //double[][] newArray = new double[array][]
+        double[][] newArray = new double[array[0].length][array.length];
         for (int i = 0; i < array[0].length; i++) {
-            for (int j = array.length-1; j >= 0; j--) {
-                array[i][j] = array[j][i];
+            for (int j = 0; j < array.length; j++) {
+                newArray[i][j] = array[j][i];
             }
         }
-        return array;
+        return newArray;
     }
 
     private double[][] toPrimitive(Double[][] array) {

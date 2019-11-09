@@ -1,15 +1,20 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing;
 
-import javax.inject.Inject;
+import com.jakubowskiartur.knowyourprotein.computing.analyzing.DataValidator;
+import com.jakubowskiartur.knowyourprotein.computing.analyzing.Deconvolution;
+import com.jakubowskiartur.knowyourprotein.computing.analyzing.PeakFinder;
+import com.jakubowskiartur.knowyourprotein.computing.analyzing.ResponseCreator;
+import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
+import com.jakubowskiartur.knowyourprotein.computing.pojos.StructureModel;
+import com.jakubowskiartur.knowyourprotein.computing.quality.*;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class IOTester {
 

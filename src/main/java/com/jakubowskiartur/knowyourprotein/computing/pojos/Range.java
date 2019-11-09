@@ -1,4 +1,4 @@
-package com.jakubowskiartur.knowyourprotein.math;
+package com.jakubowskiartur.knowyourprotein.computing.pojos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
