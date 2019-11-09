@@ -1,12 +1,17 @@
 package com.jakubowskiartur.knowyourprotein.math;
 
+import org.springframework.stereotype.Service;
+
 import java.util.*;
 
-public class PeakFinder {
+@Service
+class PeakFinder {
 
-    public double[] getMeanPeakValues(double[] peaks) {
+    Map<String, Double> getSecondaryStructures(Dataset dataset) {
 
-        Map<String, Double> values = new HashMap<>();
+        Map<String, Double> structures = new HashMap<>();
+
+        double[] peaks = getSecondaryStructurePeaks(dataset);
 
         double aggregatedStrands = 0;
         int aggregatedStrandsCounter = 0;
@@ -21,78 +26,68 @@ public class PeakFinder {
         double antiparallelBetaSheet = 0;
         int antiparallelBetaSheetCounter = 0;
 
-        for (int i = 0; i < peaks.length; i++) {
-            if (peaks[i] > 1610 && peaks[i] < 1628) {
-                aggregatedStrands += peaks[i];
+        for (double peak : peaks) {
+            if (peak > 1610 && peak < 1628) {
+                aggregatedStrands += peak;
                 aggregatedStrandsCounter++;
             }
-            if (peaks[i] > 1629 && peaks[i] < 1640) {
-                betaSheet += peaks[i];
+            if (peak > 1629 && peak < 1640) {
+                betaSheet += peak;
                 betaSheetCounter++;
             }
-            if (peaks[i] > 1641 && peaks[i] < 1648) {
-                unordered += peaks[i];
+            if (peak > 1641 && peak < 1648) {
+                unordered += peak;
                 unorderedCounter++;
             }
-            if (peaks[i] > 1649 && peaks[i] < 1660) {
-                alphaHelix += peaks[i];
+            if (peak > 1649 && peak < 1660) {
+                alphaHelix += peak;
                 alphaHelixCounter++;
             }
-            if (peaks[i] > 1661 && peaks[i] < 1670) {
-                helix310 += peaks[i];
+            if (peak > 1661 && peak < 1670) {
+                helix310 += peak;
                 helix310Counter++;
             }
-            if (peaks[i] > 1675 && peaks[i] < 1695) {
-                antiparallelBetaSheet += peaks[i];
+            if (peak > 1675 && peak < 1695) {
+                antiparallelBetaSheet += peak;
                 antiparallelBetaSheetCounter++;
             }
         }
 
-        values.put("aggregatedStrands", aggregatedStrands/aggregatedStrandsCounter);
-        values.put("betaSheet", betaSheet/betaSheetCounter);
-        values.put("unordered", unordered/unorderedCounter);
-        values.put("alphaHelix", alphaHelix/alphaHelixCounter);
-        values.put("helix310", helix310/helix310Counter);
-        values.put("antiparallelBetaSheet", antiparallelBetaSheet/antiparallelBetaSheetCounter);
+        structures.put("Aggregated Strands", aggregatedStrands/aggregatedStrandsCounter);
+        structures.put("β-Sheet", betaSheet/betaSheetCounter);
+        structures.put("Unordered Structures", unordered/unorderedCounter);
+        structures.put("α-Helix", alphaHelix/alphaHelixCounter);
+        structures.put("310-Helix", helix310/helix310Counter);
+        structures.put("Antiparallel β-Sheet", antiparallelBetaSheet/antiparallelBetaSheetCounter);
 
-        double[] peakss =  values.values().stream().mapToDouble(Double::doubleValue).toArray();
-
-        for (int i = 0; i < peakss.length; i++) {
-            System.out.println(peakss[i]);
-        }
-        return peakss;
+        return structures;
     }
 
-    public double[] getSecondaryStructurePeaks(Dataset dataset) {
+    private double[] getSecondaryStructurePeaks(Dataset dataset) {
 
-        double[] wavelengths = dataset.getX();
-        double[] minimums = findMinimums(dataset);
+        Dataset derivative = Differentiation.diff(dataset, 2);
+
+        double[] wavelengths = derivative.getX();
+        double[] minimums = findMinimums(derivative);
         double[] secondaryStructures = Arrays.stream(minimums).filter(this::isSecondaryStructure).toArray();
 
         List<Double> absorptionList = new ArrayList<>();
 
-        for (int j = 0; j < secondaryStructures.length; j++) {
-            for (int i = 0; i < wavelengths.length; i++) {
-                if (secondaryStructures[j] == wavelengths[i]) {
-                    absorptionList.add(secondaryStructures[j]);
+        for (double secondaryStructure : secondaryStructures) {
+            for (double wavelength : wavelengths) {
+                if (secondaryStructure == wavelength) {
+                    absorptionList.add(secondaryStructure);
                 }
             }
         }
-
-        double[] arr = absorptionList.stream().mapToDouble(Double::doubleValue).toArray();
-
-//        for (int i = 0; i < arr.length; i++) {
-//            System.out.println(arr[i]);
-//        }
-
-        return arr;
+        return absorptionList.stream().mapToDouble(Double::doubleValue).toArray();
     }
 
     private boolean isSecondaryStructure(double wavelength) {
 
-        Map<String, Range> map = HardcodedStructures.structures;
+        Map<String, Range> structures = HardcodedStructures.structures;
 
-        return map.entrySet().stream().anyMatch(
+        return structures.entrySet().stream().anyMatch(
                 e -> e.getValue().isInRange(wavelength)
         );
     }
@@ -109,6 +104,4 @@ public class PeakFinder {
         }
         return minValues.stream().mapToDouble(Double::doubleValue).toArray();
     }
-
-
 }

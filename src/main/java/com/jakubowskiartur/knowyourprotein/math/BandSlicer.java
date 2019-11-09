@@ -2,9 +2,9 @@ package com.jakubowskiartur.knowyourprotein.math;
 
 import java.util.Arrays;
 
-public class BandSlicer {
+class BandSlicer {
 
-    public static Dataset slice(Dataset dataset, double from, double to) {
+    static Dataset slice(Dataset dataset, double from, double to) {
 
         double[] wavelengths = dataset.getX();
         double[] values = dataset.getY();
@@ -17,5 +17,4 @@ public class BandSlicer {
 
         return Dataset.merge(amideWavelengths, amideValues);
     }
-
 }

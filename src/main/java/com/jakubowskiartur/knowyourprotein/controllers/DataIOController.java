@@ -19,8 +19,8 @@ public class DataIOController {
         this.spectrumAnalyzer = spectrumAnalyzer;
     }
 
-    @PostMapping
-    public ServerResponse<?> analyzeSpectrum(@RequestBody Dataset dataset) {
-        return spectrumAnalyzer.analyzeSpectrum(dataset);
-    }
+//    @PostMapping
+//    public ServerResponse<?> analyzeSpectrum(@RequestBody Dataset dataset) {
+//        return spectrumAnalyzer.analyzeSpectrum(dataset);
+//    }
 }

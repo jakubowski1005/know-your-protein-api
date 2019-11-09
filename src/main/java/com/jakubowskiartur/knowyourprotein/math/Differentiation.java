@@ -1,8 +1,19 @@
 package com.jakubowskiartur.knowyourprotein.math;
 
-public class Differentiation {
+class Differentiation {
 
-    static Dataset diff(Dataset dataset) {
+    static Dataset diff(Dataset dataset, int order) {
+
+        if (order < 1) throw new IllegalArgumentException("Order must be higher than 0.");
+
+        while(order > 0) {
+            dataset = diff(dataset);
+            order--;
+        }
+        return dataset;
+    }
+
+    private static Dataset diff(Dataset dataset) {
 
         double[] wavelengths = dataset.getX();
         double[] values = dataset.getY();

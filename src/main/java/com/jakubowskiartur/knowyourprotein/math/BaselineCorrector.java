@@ -1,10 +1,13 @@
 package com.jakubowskiartur.knowyourprotein.math;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Arrays;
 
-public class BaselineCorrector {
+@Service
+class BaselineCorrector {
 
-    public Dataset subtract(Dataset dataset) {
+    Dataset subtract(Dataset dataset) {
 
         Dataset background = calculateBackground(dataset);
 

@@ -3,30 +3,42 @@ package com.jakubowskiartur.knowyourprotein.math;
 import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
 import org.springframework.stereotype.Service;
 
-@Service
+import javax.inject.Inject;
+import java.util.List;
+
+//@Service
 public class SpectrumAnalyzer {
 
     private DataValidator validator;
-    private PeakFinder peakFinder;
     private Deconvolution deconvolution;
     private ResponseCreator creator;
+    private QualityEnhancer enhancer;
 
-    public ServerResponse<?> analyzeSpectrum(Dataset dataset) {
+    @Inject
+    public SpectrumAnalyzer(DataValidator validator, Deconvolution deconvolution, ResponseCreator creator, QualityEnhancer enhancer) {
+        this.validator = validator;
+        this.deconvolution = deconvolution;
+        this.creator = creator;
+        this.enhancer = enhancer;
+    }
 
-        if(!validator.isValid(dataset)) {
-            return validator.buildErrorResponse();
-        }
+    public List<StructureModel> analyzeSpectrum(Dataset dataset) {
 
-        // slice and quality improve
+//        if(!validator.isValid(dataset)) {
+//            return validator.buildErrorResponse();
+//        }
 
-        // numerical process
+        Dataset amide;
+        List<StructureModel> structures;
 
-        // find peaks
+        amide = BandSlicer.slice(dataset, 1600, 1700);
+        amide = enhancer.enhanceQuality(amide);
 
-        // deconvolution
+        structures = deconvolution.deconvolve(amide);
+
 
         // create response
 
-        return null;
+        return structures;
     }
 }

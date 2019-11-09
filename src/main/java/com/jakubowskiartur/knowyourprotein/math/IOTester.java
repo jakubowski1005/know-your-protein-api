@@ -1,5 +1,6 @@
 package com.jakubowskiartur.knowyourprotein.math;
 
+import javax.inject.Inject;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -45,16 +46,16 @@ public class IOTester {
     // convert dataset to csv file
 
 
-    public void createCSV(List<Dataset> data, String filename) throws IOException {
+    public void createCSV(List<StructureModel> data, String filename) throws IOException {
 
-        double[] wavelengths = data.get(0).getX();
-        double[] orginal = data.get(0).getY();
-        double[] component1 = data.get(1).getY();
-        double[] component2 = data.get(2).getY();
-        double[] component3 = data.get(3).getY();
-        double[] component4 = data.get(4).getY();
-        double[] component5 = data.get(5).getY();
-        double[] component6 = data.get(6).getY();
+        double[] wavelengths = data.get(0).getData().getX();
+        double[] original = data.get(0).getData().getY();
+        double[] component1 = data.get(1).getData().getY();
+        double[] component2 = data.get(2).getData().getY();
+        double[] component3 = data.get(3).getData().getY();
+        double[] component4 = data.get(4).getData().getY();
+        double[] component5 = data.get(5).getData().getY();
+        double[] component6 = data.get(6).getData().getY();
 
         try {
             BufferedWriter br = new BufferedWriter(new FileWriter("/Users/arturjakubowski/Desktop/" + filename + ".CSV"));
@@ -62,7 +63,7 @@ public class IOTester {
             for (int i=0; i < wavelengths.length; i++) {
                 sb.append(wavelengths[i]);
                 sb.append(",");
-                sb.append(orginal[i]);
+                sb.append(original[i]);
                 sb.append(",");
                 sb.append(component1[i]);
                 sb.append(",");
@@ -118,6 +119,13 @@ public class IOTester {
 
     // main
 
+//    private static SpectrumAnalyzer analyzer;
+//
+//    @Inject
+//    public IOTester(SpectrumAnalyzer analyzer) {
+//        this.analyzer = analyzer;
+//    }
+
     public static void main(String[] args) throws IOException {
 
         IOTester io = new IOTester();
@@ -126,50 +134,54 @@ public class IOTester {
 
         Dataset data = io.CSVToArray(path);
 
-        Dataset smothedSpectra = new SGFilter().smooth(data);
+        List<StructureModel> list = new SpectrumAnalyzer(new DataValidator(), new Deconvolution(new PeakFinder()), new ResponseCreator(), new QualityEnhancer(new SGFilter(), new BaselineCorrector())).analyzeSpectrum(data);
+
+        io.createCSV(list, "prezka/nowedane");
+
+//        Dataset smothedSpectra = new SGFilter().smooth(data);
 //        io.convertToCSV(smothedSpectra.get2DArray(), "prezka/smoothed");
 
-        Dataset amide = BandSlicer.slice(smothedSpectra, 1600, 1700);
+//        Dataset amide = BandSlicer.slice(smothedSpectra, 1600, 1700);
 
 
-        Dataset substracted = new BaselineCorrector().subtract(amide);
+//        Dataset substracted = new BaselineCorrector().subtract(amide);
 
 
-        Dataset diff = Differentiation.diff(substracted);
-        Dataset diff2 = Differentiation.diff(diff);
+//        Dataset diff = Differentiation.diff(substracted);
+//        Dataset diff2 = Differentiation.diff(diff);
 
 
-        double[] secondary = new PeakFinder().getSecondaryStructurePeaks(diff2);
+//        double[] secondary = new PeakFinder().getSecondaryStructurePeaks(diff2);
+//
+//        double[] peaks = new PeakFinder().getMeanPeakValues(secondary);
 
-        double[] peaks = new PeakFinder().getMeanPeakValues(secondary);
+//        Deconvolution deconvolution = new Deconvolution();
 
-        Deconvolution deconvolution = new Deconvolution();
+//        Dataset component1Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[0]);
+//        Dataset component2Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[1]);
+//        Dataset component3Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[2]);
+//        Dataset component4Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[3]);
+//        Dataset component5Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[4]);
+//        Dataset component6Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[5]);
 
-        Dataset component1Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[0]);
-        Dataset component2Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[1]);
-        Dataset component3Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[2]);
-        Dataset component4Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[3]);
-        Dataset component5Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[4]);
-        Dataset component6Gauss = deconvolution.calculateGaussianCurve(substracted, peaks[5]);
-
-        double[][] x = new double[substracted.getX().length][6];
-
-        for (int i = 0; i < x.length; i++) {
-            x[i][0] = component1Gauss.getY()[i];
-            x[i][1] = component2Gauss.getY()[i];
-            x[i][2] = component3Gauss.getY()[i];
-            x[i][3] = component4Gauss.getY()[i];
-            x[i][4] = component5Gauss.getY()[i];
-            x[i][5] = component6Gauss.getY()[i];
-        }
-
-        double[] coeffs = new MultiLinearRegression().doRegression(substracted.getY(), x);
-
-
+//        double[][] x = new double[substracted.getX().length][6];
+//
+//        for (int i = 0; i < x.length; i++) {
+//            x[i][0] = component1Gauss.getY()[i];
+//            x[i][1] = component2Gauss.getY()[i];
+//            x[i][2] = component3Gauss.getY()[i];
+//            x[i][3] = component4Gauss.getY()[i];
+//            x[i][4] = component5Gauss.getY()[i];
+//            x[i][5] = component6Gauss.getY()[i];
+//        }
+//
+//        double[] coeffs = new MultiLinearRegression().doRegression(substracted.getY(), x);
 
 
-        List<Dataset> components = new ArrayList<>();
-        components.add(substracted);
+
+
+//        List<Dataset> components = new ArrayList<>();
+//        components.add(substracted);
 //        components.add(component1Gauss);
 //        components.add(component2Gauss);
 //        components.add(component3Gauss);
@@ -177,12 +189,12 @@ public class IOTester {
 //        components.add(component5Gauss);
 //        components.add(component6Gauss);
 
-        for (int i = 0; i < peaks.length; i++) {
-            components.add(deconvolution.gaussianFit(substracted, peaks[i], coeffs[i]));
-        }
+//        for (int i = 0; i < peaks.length; i++) {
+//            components.add(deconvolution.gaussianFit(substracted, peaks[i], coeffs[i]));
+//        }
 
 
-        io.createCSV(components, "prezka/dane");
+//        io.createCSV(components, "prezka/dane");
 
 //        Dataset component = new Deconvolution().gaussianFit(substracted, 1621);
 //

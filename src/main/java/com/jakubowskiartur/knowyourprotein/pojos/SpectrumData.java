@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Builder
+//@Builder
 @NoArgsConstructor
 public class SpectrumData {
 

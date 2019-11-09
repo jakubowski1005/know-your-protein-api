@@ -2,7 +2,9 @@ package com.jakubowskiartur.knowyourprotein.math;
 
 import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
+@Service
 class DataValidator {
 
     ServerResponse<?> buildErrorResponse() {
