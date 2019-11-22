@@ -1,15 +1,27 @@
 package com.jakubowskiartur.knowyourprotein.computing.pojos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.util.UUID;
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Dataset {
 
-    private double[] x;
-    private double[] y;
+    @Id
+    @GeneratedValue
+    private UUID id;
 
+    @NonNull private double[] x;
+    @NonNull private double[] y;
+
+    @JsonIgnore
     public double[][] get2DArray() {
 
         double[] x = this.getX();

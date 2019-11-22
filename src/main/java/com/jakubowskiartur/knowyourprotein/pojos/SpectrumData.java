@@ -11,18 +11,20 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SpectrumData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @NonNull
     private String name;
 
     @NonNull
+    @OneToMany
     private List<StructureModel> structures;
 
     private final LocalDate creationDate = LocalDate.now();
@@ -30,6 +32,5 @@ public class SpectrumData {
     @ManyToOne
     @ToString.Exclude
     @JsonIgnore
-    @NonNull
     private User user;
 }

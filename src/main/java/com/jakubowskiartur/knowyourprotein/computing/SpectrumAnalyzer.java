@@ -31,7 +31,7 @@ public class SpectrumAnalyzer {
 
     public ServerResponse<?> analyzeSpectrum(Dataset dataset) {
 
-        if(!validator.isValid(dataset)) {
+        if(validator.isValid(dataset)) {
             return validator.buildErrorResponse();
         }
 

@@ -1,9 +1,6 @@
 package com.jakubowskiartur.knowyourprotein.computing;
 
-import com.jakubowskiartur.knowyourprotein.computing.analyzing.DataValidator;
-import com.jakubowskiartur.knowyourprotein.computing.analyzing.Deconvolution;
-import com.jakubowskiartur.knowyourprotein.computing.analyzing.PeakFinder;
-import com.jakubowskiartur.knowyourprotein.computing.analyzing.ResponseCreator;
+
 import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
 import com.jakubowskiartur.knowyourprotein.computing.pojos.StructureModel;
 import com.jakubowskiartur.knowyourprotein.computing.quality.*;
@@ -133,15 +130,15 @@ public class IOTester {
 
     public static void main(String[] args) throws IOException {
 
-        IOTester io = new IOTester();
-
-        String path = "/Users/arturjakubowski/Desktop/B1.CSV";
-
-        Dataset data = io.CSVToArray(path);
-
-        List<StructureModel> list = new SpectrumAnalyzer(new DataValidator(), new Deconvolution(new PeakFinder()), new ResponseCreator(), new QualityEnhancer(new SGFilter(), new BaselineCorrector())).analyzeSpectrum(data);
-
-        io.createCSV(list, "prezka/nowedane");
+//        IOTester io = new IOTester();
+//
+//        String path = "/Users/arturjakubowski/Desktop/B1.CSV";
+//
+//        Dataset data = io.CSVToArray(path);
+//
+//        List<StructureModel> list = new SpectrumAnalyzer(new DataValidator(), new Deconvolution(new PeakFinder()), new ResponseCreator(), new QualityEnhancer(new SGFilter(), new BaselineCorrector())).analyzeSpectrum(data);
+//
+//        io.createCSV(list, "prezka/nowedane");
 
 //        Dataset smothedSpectra = new SGFilter().smooth(data);
 //        io.convertToCSV(smothedSpectra.get2DArray(), "prezka/smoothed");
