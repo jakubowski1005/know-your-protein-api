@@ -27,17 +27,31 @@ public class Deconvolution {
         List<StructureModel> structureModels = new ArrayList<>();
 
         double[] peaksPositions = structures.values().stream().mapToDouble(Double::doubleValue).toArray();
+
+        ////////////////////////////////////
+        System.out.println();
+        for(double peakPosition: peaksPositions) {
+            System.out.println(peakPosition);
+        }
+        ////////////////////////////////////
+
         String[] names = structures.keySet().toArray(new String[0]);
         double[] amplitudes = calculateAmplitude(dataset, peaksPositions);
-
-        structureModels.add(new StructureModel("Amide I", dataset, Integration.integrate(dataset)));
+        int clientId = 1;
 
         for (int i = 0; i < names.length; i++) {
-            Dataset component = gaussianFit(dataset, peaksPositions[i], amplitudes[i]);
-            structureModels.add(
-                    new StructureModel(names[i], component, Integration.integrate(component))
-            );
+
+            if(amplitudes[i] > 0) {
+                Dataset component = gaussianFit(dataset, peaksPositions[i], amplitudes[i]);
+                structureModels.add(
+                        new StructureModel(clientId, names[i], component, findMaximumValuePosition(component), Integration.integrate(component))
+                );
+                clientId++;
+            }
         }
+
+        structureModels.add(new StructureModel(clientId, "Amide I", dataset, findMaximumValuePosition(dataset), Integration.integrate(dataset)));
+
         return structureModels;
     }
 
@@ -99,5 +113,12 @@ public class Deconvolution {
             }
         }
         return primitives;
+    }
+
+    private Double findMaximumValuePosition(Dataset dataset) {
+        List<Double> doubles = DoubleStream.of(dataset.getY()).boxed().collect(Collectors.toList());
+        Double maxAbsorbance = Collections.max(doubles);
+        int index = doubles.indexOf(maxAbsorbance);
+        return dataset.getX()[index];
     }
 }

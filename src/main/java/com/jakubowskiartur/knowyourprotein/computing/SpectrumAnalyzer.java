@@ -35,12 +35,9 @@ public class SpectrumAnalyzer {
             return validator.buildErrorResponse();
         }
 
-        Dataset amide;
-        List<StructureModel> structures;
-
-        amide = BandSlicer.slice(dataset, 1600, 1700);
-        amide = enhancer.enhanceQuality(amide);
-        structures = deconvolution.deconvolve(amide);
+        Dataset amide = BandSlicer.slice(dataset, 1600, 1700);
+        Dataset filtered = enhancer.enhanceQuality(amide);
+        List<StructureModel> structures = deconvolution.deconvolve(filtered);
 
         return creator.buildSpectrumData(structures);
     }

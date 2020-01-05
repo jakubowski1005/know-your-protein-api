@@ -4,9 +4,9 @@ import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
 import org.springframework.stereotype.Service;
 
 @Service
-class SGFilter {
+public class SGFilter {
 
-    Dataset smooth(Dataset dataset) {
+    public Dataset smooth(Dataset dataset) {
 
         double[] x = dataset.getX();
         double[] y = dataset.getY();

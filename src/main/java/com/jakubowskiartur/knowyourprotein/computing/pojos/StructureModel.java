@@ -14,11 +14,15 @@ public class StructureModel {
     @GeneratedValue
     private UUID id;
 
+    @NonNull private Integer clientId;
+
     @NonNull private String name;
 
     @NonNull
     @OneToOne
     private Dataset data;
+
+    @NonNull private Double peakPosition;
 
     @NonNull private Double absorbance;
 }

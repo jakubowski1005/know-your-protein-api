@@ -9,47 +9,43 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-class PeakFinder {
+public class PeakFinder {
 
-    Map<String, Double> getSecondaryStructures(Dataset dataset) {
+    public Map<String, Double> getSecondaryStructures(Dataset dataset) {
 
         Map<String, Double> structures = new HashMap<>();
 
-        double[] peaks = getSecondaryStructurePeaks(dataset);
+       double[] peaks = getSecondaryStructurePeaks(dataset);
 
         double aggregatedStrands = 0;
         int aggregatedStrandsCounter = 0;
         double betaSheet = 0;
         int betaSheetCounter = 0;
-        double unordered = 0;
-        int unorderedCounter = 0;
         double alphaHelix = 0;
         int alphaHelixCounter = 0;
-        double helix310 = 0;
-        int helix310Counter = 0;
+        double betaTurn = 0;
+        int betaTurnCounter = 0;
         double antiparallelBetaSheet = 0;
         int antiparallelBetaSheetCounter = 0;
 
+
+
         for (double peak : peaks) {
-            if (peak > 1610 && peak < 1628) {
+            if (peak > 1610 && peak < 1625) {
                 aggregatedStrands += peak;
                 aggregatedStrandsCounter++;
             }
-            if (peak > 1629 && peak < 1640) {
+            if (peak > 1625 && peak < 1648) {
                 betaSheet += peak;
                 betaSheetCounter++;
             }
-            if (peak > 1641 && peak < 1648) {
-                unordered += peak;
-                unorderedCounter++;
-            }
-            if (peak > 1649 && peak < 1660) {
+            if (peak > 1648 && peak < 1660) {
                 alphaHelix += peak;
                 alphaHelixCounter++;
             }
-            if (peak > 1661 && peak < 1670) {
-                helix310 += peak;
-                helix310Counter++;
+            if (peak > 1660 && peak < 1680) {
+                betaTurn += peak;
+                betaTurnCounter++;
             }
             if (peak > 1675 && peak < 1695) {
                 antiparallelBetaSheet += peak;
@@ -57,19 +53,18 @@ class PeakFinder {
             }
         }
 
-        structures.put("Aggregated Strands", aggregatedStrands/aggregatedStrandsCounter);
-        structures.put("β-Sheet", betaSheet/betaSheetCounter);
-        structures.put("Unordered Structures", unordered/unorderedCounter);
-        structures.put("α-Helix", alphaHelix/alphaHelixCounter);
-        structures.put("310-Helix", helix310/helix310Counter);
-        structures.put("Antiparallel β-Sheet", antiparallelBetaSheet/antiparallelBetaSheetCounter);
+        if(aggregatedStrandsCounter != 0) structures.put("Aggregated Strands", aggregatedStrands/aggregatedStrandsCounter);
+        if(betaSheetCounter != 0) structures.put("β-Sheet", betaSheet/betaSheetCounter);
+        if(alphaHelixCounter != 0) structures.put("α-Helix", alphaHelix/alphaHelixCounter);
+        if(betaTurnCounter != 0) structures.put("β-Turn", betaTurn/betaTurnCounter);
+        if(antiparallelBetaSheetCounter != 0) structures.put("Antiparallel β-Sheet", antiparallelBetaSheet/antiparallelBetaSheetCounter);
 
         return structures;
     }
 
     private double[] getSecondaryStructurePeaks(Dataset dataset) {
 
-        Dataset derivative = Differentiation.diff(dataset, 2);
+        Dataset derivative = Differentiation.diff(dataset, 4);
 
         double[] wavelengths = derivative.getX();
         double[] minimums = findMinimums(derivative);
