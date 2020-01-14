@@ -27,14 +27,6 @@ public class Deconvolution {
         List<StructureModel> structureModels = new ArrayList<>();
 
         double[] peaksPositions = structures.values().stream().mapToDouble(Double::doubleValue).toArray();
-
-        ////////////////////////////////////
-        System.out.println();
-        for(double peakPosition: peaksPositions) {
-            System.out.println(peakPosition);
-        }
-        ////////////////////////////////////
-
         String[] names = structures.keySet().toArray(new String[0]);
         double[] amplitudes = calculateAmplitude(dataset, peaksPositions);
         int clientId = 1;

@@ -33,18 +33,7 @@ public class BaselineCorrector {
         Dataset rightSide = slice(dataset, maxIndex, "right");
 
         int leftMin = findMinimum(leftSide.getY());
-        if(y[leftMin] < 0) {
-            System.out.println("Left min");
-            leftSide = grow(leftSide, y[leftMin]);
-            rightSide = grow(rightSide, y[leftMin]);
-        }
-
         int rightMin = findMinimum(rightSide.getY());
-        if(y[rightMin] < 0) {
-            System.out.println("Right min");
-            rightSide = grow(rightSide, y[rightMin]);
-            leftSide = grow(leftSide, y[rightMin]);
-        }
 
         double a = (leftSide.getY()[leftMin] - rightSide.getY()[rightMin])/(leftSide.getX()[leftMin] - rightSide.getX()[rightMin]);
         double b = leftSide.getY()[leftMin] - (a * leftSide.getX()[leftMin]);
@@ -100,15 +89,5 @@ public class BaselineCorrector {
 
         if(part.toLowerCase().equals("left")) return Dataset.merge(xLeft, yLeft);
         return Dataset.merge(xRight, yRight);
-    }
-
-    private Dataset grow(Dataset dataset, double value) {
-
-        double[] y = dataset.getY();
-
-        for (int i = 0; i < y.length; i++) {
-            y[i] += Math.abs(value);
-        }
-        return Dataset.merge(dataset.getX(), y);
     }
 }

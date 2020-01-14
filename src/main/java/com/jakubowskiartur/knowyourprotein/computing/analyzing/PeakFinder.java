@@ -28,8 +28,6 @@ public class PeakFinder {
         double antiparallelBetaSheet = 0;
         int antiparallelBetaSheetCounter = 0;
 
-
-
         for (double peak : peaks) {
             if (peak > 1610 && peak < 1625) {
                 aggregatedStrands += peak;
