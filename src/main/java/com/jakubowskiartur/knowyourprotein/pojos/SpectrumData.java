@@ -3,13 +3,13 @@ package com.jakubowskiartur.knowyourprotein.pojos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jakubowskiartur.knowyourprotein.computing.pojos.StructureModel;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
-@Entity
+@Document
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -18,18 +18,16 @@ import java.util.UUID;
 public class SpectrumData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private String id;
 
+    @NonNull
     private String name;
 
     @NonNull
-    @OneToMany
     private List<StructureModel> structures;
 
     private final LocalDate creationDate = LocalDate.now();
 
-    @ManyToOne
     @ToString.Exclude
     @JsonIgnore
     private User user;

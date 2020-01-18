@@ -24,6 +24,11 @@ public class UserController {
         return userService.retrieveByID(id);
     }
 
+    @GetMapping("/users/{username}")
+    public ServerResponse<?> retrieveUserByUsername(@PathVariable String username) {
+        return userService.retrieveByUsernameOrEmail(username);
+    }
+
     @DeleteMapping("/users/{id}")
     public ServerResponse<?> deleteUser(@PathVariable UUID id) {
         return userService.deleteUser(id);
