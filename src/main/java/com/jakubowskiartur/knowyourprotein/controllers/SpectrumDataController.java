@@ -6,7 +6,6 @@ import com.jakubowskiartur.knowyourprotein.services.SpectrumDataService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/data")
@@ -21,7 +20,7 @@ public class SpectrumDataController {
     }
 
     @GetMapping("/spectras/{id}")
-    public ServerResponse<?> retrieveSpectrumByID(@PathVariable UUID id) {
+    public ServerResponse<?> retrieveSpectrumByID(@PathVariable String id) {
         return spectrumDataService.retrieveByID(id);
     }
 
@@ -36,12 +35,12 @@ public class SpectrumDataController {
     }
 
     @PutMapping("/spectras/{id}")
-    public ServerResponse<?> updateSpectrum(@PathVariable UUID id, SpectrumData newSpectrum) {
+    public ServerResponse<?> updateSpectrum(@PathVariable String id, SpectrumData newSpectrum) {
         return spectrumDataService.updateSpectrum(id, newSpectrum);
     }
 
     @DeleteMapping("/spectras/{id}")
-    public ServerResponse<?> deleteSpectrum(@PathVariable UUID id) {
+    public ServerResponse<?> deleteSpectrum(@PathVariable String id) {
         return spectrumDataService.deleteSpectrumByID(id);
     }
 

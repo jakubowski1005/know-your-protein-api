@@ -5,7 +5,6 @@ import com.jakubowskiartur.knowyourprotein.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/data")
@@ -20,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ServerResponse<?> retrieveUserByID(@PathVariable UUID id) {
+    public ServerResponse<?> retrieveUserByID(@PathVariable String id) {
         return userService.retrieveByID(id);
     }
 
@@ -30,7 +29,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ServerResponse<?> deleteUser(@PathVariable UUID id) {
+    public ServerResponse<?> deleteUser(@PathVariable String id) {
         return userService.deleteUser(id);
     }
 }

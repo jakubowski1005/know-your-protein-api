@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -28,7 +27,7 @@ public class UserService implements UserDetailsService {
         return (UserDetails) retrieveByUsernameOrEmail(username).getBody();
     }
 
-    public ServerResponse<?> retrieveByID(UUID id) {
+    public ServerResponse<?> retrieveByID(String id) {
         User retrievedUser = repository.findById(id).orElseThrow(
                 () -> new UsernameNotFoundException(String.format("Cannot find user with ID: %s.", id))
         );
@@ -52,7 +51,7 @@ public class UserService implements UserDetailsService {
                 .body(retrievedUser).build();
     }
 
-    public ServerResponse<?> deleteUser(UUID id) {
+    public ServerResponse<?> deleteUser(String id) {
         User retrievedUser = repository.findById(id).orElseThrow(
                 () -> new UsernameNotFoundException(String.format("Cannot find user with ID: %s.", id))
         );
