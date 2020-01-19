@@ -4,6 +4,8 @@ import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
 import com.jakubowskiartur.knowyourprotein.pojos.User;
 import com.jakubowskiartur.knowyourprotein.repos.UserRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +13,19 @@ import javax.inject.Inject;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private UserRepository repository;
 
     @Inject
     public UserService(UserRepository repository) {
         this.repository = repository;
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return (UserDetails) retrieveByUsernameOrEmail(username).getBody();
     }
 
     public ServerResponse<?> retrieveByID(UUID id) {
@@ -42,13 +50,6 @@ public class UserService {
                 .success(true)
                 .message("User data loaded successfully.")
                 .body(retrievedUser).build();
-    }
-
-
-    public ServerResponse<?> updatePassword(UUID id, String newPassword) {
-
-        // in future
-        return null;
     }
 
     public ServerResponse<?> deleteUser(UUID id) {

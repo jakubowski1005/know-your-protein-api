@@ -33,9 +33,4 @@ public class UserController {
     public ServerResponse<?> deleteUser(@PathVariable UUID id) {
         return userService.deleteUser(id);
     }
-
-    @PutMapping("/users/{id}")
-    public ServerResponse<?> updatePassword(@PathVariable UUID id, String newPassword) {
-        return userService.updatePassword(id, newPassword);
-    }
 }

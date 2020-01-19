@@ -1,5 +1,6 @@
 package com.jakubowskiartur.knowyourprotein.services;
 
+import com.jakubowskiartur.knowyourprotein.payloads.CustomTokenResponse;
 import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
 import com.jakubowskiartur.knowyourprotein.payloads.SignInRequest;
 import com.jakubowskiartur.knowyourprotein.payloads.SignUpRequest;
@@ -12,7 +13,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 @Service
 @Slf4j
@@ -21,9 +28,15 @@ public class AuthService {
     private UserRepository repository;
     private AuthenticationManager manager;
     private PasswordEncoder encoder;
-//    private TokenStore store;
+    private TokenStore store;
 
-    //constructor injection
+    @Inject
+    public AuthService(UserRepository repository, AuthenticationManager manager, PasswordEncoder encoder, @Named("tokenStore") TokenStore store) {
+        this.repository = repository;
+        this.manager = manager;
+        this.encoder = encoder;
+        this.store = store;
+    }
 
     public ServerResponse<?> authenticateUser(SignInRequest request) {
 
@@ -34,23 +47,22 @@ public class AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        //String token = store.generateTokenFromAuthentication(authentication);
+        OAuth2AccessToken token = store.getAccessToken(((OAuth2Authentication) authentication));
 
-//        if(!store.validateToken(token)) {
-//            return ServerResponse.builder()
-//                    .http(HttpStatus.UNAUTHORIZED)
-//                    .message("User does not exist.")
-//                    .success(false)
-//                    .build();
-//        }
+        if(!store.readAuthentication(token).isAuthenticated()) {
+            return ServerResponse.builder()
+                    .http(HttpStatus.UNAUTHORIZED)
+                    .message("User does not exist.")
+                    .success(false)
+                    .build();
+        }
 
-//        return ServerResponse.builder()
-//                .http(HttpStatus.OK)
-//                .success(true)
-//                .message("User has been logged.")
-//                .body(Object with tokenType and token)
-//                .build();
-        return null;
+        return ServerResponse.builder()
+                .http(HttpStatus.OK)
+                .success(true)
+                .message("User has been logged.")
+                .body(new CustomTokenResponse(token.getTokenType(), token.getValue()))
+                .build();
     }
 
     public ServerResponse<?> registerUser(SignUpRequest request) {
