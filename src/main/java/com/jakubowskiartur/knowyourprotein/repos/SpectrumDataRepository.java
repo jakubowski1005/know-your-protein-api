@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface SpectrumDataRepository extends MongoRepository<SpectrumData, UUID> {
+public interface SpectrumDataRepository extends MongoRepository<SpectrumData, String> {
 
     List<SpectrumData> getAllByUser_Id(String user_id);
 

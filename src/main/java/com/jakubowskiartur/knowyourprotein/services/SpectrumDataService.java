@@ -4,25 +4,26 @@ import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
 import com.jakubowskiartur.knowyourprotein.pojos.SpectrumData;
 import com.jakubowskiartur.knowyourprotein.pojos.User;
 import com.jakubowskiartur.knowyourprotein.repos.SpectrumDataRepository;
+import com.jakubowskiartur.knowyourprotein.security.CustomUserAuthHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class SpectrumDataService {
 
     private SpectrumDataRepository repository;
-    //field with some security object
+    private CustomUserAuthHandler auth;
 
     @Inject
-    public SpectrumDataService(SpectrumDataRepository repository) {
+    public SpectrumDataService(SpectrumDataRepository repository, CustomUserAuthHandler auth) {
         this.repository = repository;
+        this.auth = auth;
     }
 
-    public ServerResponse<?> retrieveByID(UUID id) {
+    public ServerResponse<?> retrieveByID(String id) {
 
         SpectrumData spectrumData = repository.findById(id).orElseThrow(
                 () -> new SecurityException("You have no access to the resources.")
@@ -38,7 +39,7 @@ public class SpectrumDataService {
 
     public ServerResponse<?> retrieveAllByUser() {
 
-        User loggedInUser = new User(); // get user from security context
+        User loggedInUser = auth.getAuthenticationUser();
         List<SpectrumData> spectras = repository.getAllByUser(loggedInUser);
 
         return ServerResponse.builder()
@@ -51,7 +52,7 @@ public class SpectrumDataService {
 
     public ServerResponse<?> createSpectrum(SpectrumData spectrumData) {
 
-        User loggedInUser = new User(); // get user from security context
+        User loggedInUser = auth.getAuthenticationUser();
         spectrumData.setUser(loggedInUser);
         repository.save(spectrumData);
 
@@ -63,10 +64,10 @@ public class SpectrumDataService {
                 .build();
     }
 
-    public ServerResponse<?> updateSpectrum(UUID id, SpectrumData newSpectrum) {
+    public ServerResponse<?> updateSpectrum(String id, SpectrumData newSpectrum) {
 
-        User loggedInUser = new User(); // get user from security context
-        SpectrumData spectrumData = repository.getOne(id);
+        User loggedInUser = auth.getAuthenticationUser();
+        SpectrumData spectrumData = repository.findById(id).orElse(null);
 
         if(spectrumData == null) return resourcesNotFound();
 
@@ -82,9 +83,9 @@ public class SpectrumDataService {
                 .build();
     }
 
-    public ServerResponse<?> deleteSpectrumByID(UUID id) {
+    public ServerResponse<?> deleteSpectrumByID(String id) {
 
-        SpectrumData spectrumData = repository.getOne(id);
+        SpectrumData spectrumData = repository.findById(id).orElse(null);
 
         if(spectrumData == null) return resourcesNotFound();
 
@@ -99,7 +100,7 @@ public class SpectrumDataService {
 
     public ServerResponse<?> deleteAll() {
 
-        User loggedInUser = new User(); // get user from security context
+        User loggedInUser = auth.getAuthenticationUser();
 
         List<SpectrumData> spectras = repository.getAllByUser(loggedInUser);
 
