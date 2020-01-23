@@ -20,7 +20,7 @@ public class SpectrumDataController {
     }
 
     @GetMapping("/spectras/{id}")
-    public ServerResponse<?> retrieveSpectrumByID(@PathVariable String id) {
+    public ServerResponse<?> retrieveSpectrumByID(@PathVariable Long id) {
         return spectrumDataService.retrieveByID(id);
     }
 
@@ -35,12 +35,12 @@ public class SpectrumDataController {
     }
 
     @PutMapping("/spectras/{id}")
-    public ServerResponse<?> updateSpectrum(@PathVariable String id, SpectrumData newSpectrum) {
+    public ServerResponse<?> updateSpectrum(@PathVariable Long id, SpectrumData newSpectrum) {
         return spectrumDataService.updateSpectrum(id, newSpectrum);
     }
 
     @DeleteMapping("/spectras/{id}")
-    public ServerResponse<?> deleteSpectrum(@PathVariable String id) {
+    public ServerResponse<?> deleteSpectrum(@PathVariable Long id) {
         return spectrumDataService.deleteSpectrumByID(id);
     }
 

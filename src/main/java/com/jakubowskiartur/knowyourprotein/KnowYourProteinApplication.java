@@ -9,5 +9,4 @@ public class KnowYourProteinApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(KnowYourProteinApplication.class, args);
 	}
-
 }

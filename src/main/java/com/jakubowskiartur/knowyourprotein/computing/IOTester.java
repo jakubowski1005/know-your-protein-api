@@ -11,7 +11,7 @@ import com.jakubowskiartur.knowyourprotein.computing.pojos.Dataset;
 import com.jakubowskiartur.knowyourprotein.computing.pojos.StructureModel;
 import com.jakubowskiartur.knowyourprotein.computing.quality.*;
 import com.jakubowskiartur.knowyourprotein.pojos.SpectrumData;
-import com.jakubowskiartur.knowyourprotein.services.SpectrumDataService;
+//import com.jakubowskiartur.knowyourprotein.services.SpectrumDataService;
 
 import javax.xml.crypto.Data;
 import java.io.BufferedWriter;

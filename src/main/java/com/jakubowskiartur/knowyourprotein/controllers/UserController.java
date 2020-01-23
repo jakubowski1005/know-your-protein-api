@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ServerResponse<?> retrieveUserByID(@PathVariable String id) {
+    public ServerResponse<?> retrieveUserByID(@PathVariable Long id) {
         return userService.retrieveByID(id);
     }
 
@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ServerResponse<?> deleteUser(@PathVariable String id) {
+    public ServerResponse<?> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
     }
 }

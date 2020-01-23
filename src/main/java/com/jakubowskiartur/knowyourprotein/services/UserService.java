@@ -3,8 +3,8 @@ package com.jakubowskiartur.knowyourprotein.services;
 import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
 import com.jakubowskiartur.knowyourprotein.pojos.User;
 import com.jakubowskiartur.knowyourprotein.repos.UserRepository;
+import com.jakubowskiartur.knowyourprotein.security.UserPrincipal;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -23,11 +23,11 @@ public class UserService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) retrieveByUsernameOrEmail(username).getBody();
+    public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
+        return UserPrincipal.create((User) retrieveByUsernameOrEmail(username).getBody());
     }
 
-    public ServerResponse<?> retrieveByID(String id) {
+    public ServerResponse<?> retrieveByID(Long id) {
         User retrievedUser = repository.findById(id).orElseThrow(
                 () -> new UsernameNotFoundException(String.format("Cannot find user with ID: %s.", id))
         );
@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
                 .body(retrievedUser).build();
     }
 
-    public ServerResponse<?> deleteUser(String id) {
+    public ServerResponse<?> deleteUser(Long id) {
         User retrievedUser = repository.findById(id).orElseThrow(
                 () -> new UsernameNotFoundException(String.format("Cannot find user with ID: %s.", id))
         );

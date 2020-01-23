@@ -4,7 +4,7 @@ import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse;
 import com.jakubowskiartur.knowyourprotein.pojos.SpectrumData;
 import com.jakubowskiartur.knowyourprotein.pojos.User;
 import com.jakubowskiartur.knowyourprotein.repos.SpectrumDataRepository;
-import com.jakubowskiartur.knowyourprotein.security.CustomUserAuthHandler;
+import com.jakubowskiartur.knowyourprotein.security.CustomEndpointAuthorization;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +15,15 @@ import java.util.List;
 public class SpectrumDataService {
 
     private SpectrumDataRepository repository;
-    private CustomUserAuthHandler auth;
+    private CustomEndpointAuthorization auth;
 
     @Inject
-    public SpectrumDataService(SpectrumDataRepository repository, CustomUserAuthHandler auth) {
+    public SpectrumDataService(SpectrumDataRepository repository, CustomEndpointAuthorization auth) {
         this.repository = repository;
         this.auth = auth;
     }
 
-    public ServerResponse<?> retrieveByID(String id) {
+    public ServerResponse<?> retrieveByID(Long id) {
 
         SpectrumData spectrumData = repository.findById(id).orElseThrow(
                 () -> new SecurityException("You have no access to the resources.")
@@ -39,7 +39,7 @@ public class SpectrumDataService {
 
     public ServerResponse<?> retrieveAllByUser() {
 
-        User loggedInUser = auth.getAuthenticationUser();
+        User loggedInUser = auth.getAuthenticatedUser();
         List<SpectrumData> spectras = repository.getAllByUser(loggedInUser);
 
         return ServerResponse.builder()
@@ -52,7 +52,7 @@ public class SpectrumDataService {
 
     public ServerResponse<?> createSpectrum(SpectrumData spectrumData) {
 
-        User loggedInUser = auth.getAuthenticationUser();
+        User loggedInUser = auth.getAuthenticatedUser();
         spectrumData.setUser(loggedInUser);
         repository.save(spectrumData);
 
@@ -64,9 +64,9 @@ public class SpectrumDataService {
                 .build();
     }
 
-    public ServerResponse<?> updateSpectrum(String id, SpectrumData newSpectrum) {
+    public ServerResponse<?> updateSpectrum(Long id, SpectrumData newSpectrum) {
 
-        User loggedInUser = auth.getAuthenticationUser();
+        User loggedInUser = auth.getAuthenticatedUser();
         SpectrumData spectrumData = repository.findById(id).orElse(null);
 
         if(spectrumData == null) return resourcesNotFound();
@@ -83,7 +83,7 @@ public class SpectrumDataService {
                 .build();
     }
 
-    public ServerResponse<?> deleteSpectrumByID(String id) {
+    public ServerResponse<?> deleteSpectrumByID(Long id) {
 
         SpectrumData spectrumData = repository.findById(id).orElse(null);
 
@@ -100,7 +100,7 @@ public class SpectrumDataService {
 
     public ServerResponse<?> deleteAll() {
 
-        User loggedInUser = auth.getAuthenticationUser();
+        User loggedInUser = auth.getAuthenticatedUser();
 
         List<SpectrumData> spectras = repository.getAllByUser(loggedInUser);
 

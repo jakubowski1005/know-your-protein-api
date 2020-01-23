@@ -1,80 +1,90 @@
 package com.jakubowskiartur.knowyourprotein.config;
 
+import com.jakubowskiartur.knowyourprotein.security.AuthFilter;
+import com.jakubowskiartur.knowyourprotein.security.CustomEndpointAuthorization;
+import com.jakubowskiartur.knowyourprotein.security.UnauthorizedResponseAuthenticationEntryPoint;
 import com.jakubowskiartur.knowyourprotein.services.UserService;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.BeanIds;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserService userService;
+    @Inject private CustomEndpointAuthorization auth;
+    @Inject private UnauthorizedResponseAuthenticationEntryPoint unauthorizedHandler;
 
-    @Inject
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
+    @Bean
+    public AuthFilter authFilter() {
+        return new AuthFilter();
     }
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-    @Inject
-    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
-                .passwordEncoder(encoder());
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
-                .csrf().disable()
+                .requiresChannel()
+                    .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                    .requiresSecure()
+                    .and()
+                .cors()
+                    .and()
+                .csrf()
+                    .disable()
+                .exceptionHandling()
+                    .authenticationEntryPoint(unauthorizedHandler)
+                    .and()
+                .headers()
+                    .frameOptions()
+                    .disable()
+                    .and()
+                .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/", "/analyze").permitAll()
-                .anyRequest().authenticated()
-                .and().anonymous().disable();
+                    .antMatchers("/")
+                        .permitAll()
+                    .antMatchers("/auth/**")
+                        .permitAll()
+                    .antMatchers("/h2-console/**")
+                        .permitAll()
+                    .antMatchers("/api/users/{userId}/**")
+                        .access("@auth.isUserAuthorized(authentication, #userId)")
+                    .antMatchers("/api/users?username={usernameOrEmail}")
+                        .access("@auth.isUserAuthorizedToGetUserByUsername(authentication, #usernameOrEmail)")
+                .anyRequest()
+                    .authenticated();
+
+        http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
-    @Bean
-    public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
-    }
-
-    @Bean
-    public PasswordEncoder encoder(){
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-        bean.setOrder(0);
-        return bean;
-    }
 
 }

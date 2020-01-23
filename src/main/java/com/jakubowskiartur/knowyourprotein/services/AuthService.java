@@ -6,6 +6,7 @@ import com.jakubowskiartur.knowyourprotein.payloads.SignInRequest;
 import com.jakubowskiartur.knowyourprotein.payloads.SignUpRequest;
 import com.jakubowskiartur.knowyourprotein.pojos.User;
 import com.jakubowskiartur.knowyourprotein.repos.UserRepository;
+import com.jakubowskiartur.knowyourprotein.security.TokenStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,13 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 @Service
 @Slf4j
@@ -31,7 +28,7 @@ public class AuthService {
     private TokenStore store;
 
     @Inject
-    public AuthService(UserRepository repository, AuthenticationManager manager, PasswordEncoder encoder, @Named("tokenStore") TokenStore store) {
+    public AuthService(UserRepository repository, AuthenticationManager manager, PasswordEncoder encoder, TokenStore store) {
         this.repository = repository;
         this.manager = manager;
         this.encoder = encoder;
@@ -47,9 +44,9 @@ public class AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        OAuth2AccessToken token = store.getAccessToken(((OAuth2Authentication) authentication));
+        String token = store.generateTokenFromAuthentication(authentication);
 
-        if(!store.readAuthentication(token).isAuthenticated()) {
+        if(!store.validateToken(token)) {
             return ServerResponse.builder()
                     .http(HttpStatus.UNAUTHORIZED)
                     .message("User does not exist.")
@@ -61,7 +58,7 @@ public class AuthService {
                 .http(HttpStatus.OK)
                 .success(true)
                 .message("User has been logged.")
-                .body(new CustomTokenResponse(token.getTokenType(), token.getValue()))
+                .body(new CustomTokenResponse("Bearer ", token))
                 .build();
     }
 
