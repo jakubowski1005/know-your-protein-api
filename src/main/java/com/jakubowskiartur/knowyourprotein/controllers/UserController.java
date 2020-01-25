@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 @RestController
 @RequestMapping("/data")
-@CrossOrigin(origins = "${client.url}")
+//@CrossOrigin(origins = "${client.url}")
 public class UserController {
 
     private UserService userService;
@@ -23,8 +23,8 @@ public class UserController {
         return userService.retrieveByID(id);
     }
 
-    @GetMapping("/users/{username}")
-    public ServerResponse<?> retrieveUserByUsername(@PathVariable String username) {
+    @GetMapping("/users")
+    public ServerResponse<?> retrieveUserByUsername(@RequestParam(value = "username") String username) {
         return userService.retrieveByUsernameOrEmail(username);
     }
 
