@@ -76,7 +76,7 @@ public class SpectrumDataService {
         repository.save(newSpectrum);
 
         return ServerResponse.builder()
-                .http(HttpStatus.CREATED)
+                .http(HttpStatus.OK)
                 .message("Spectrum data updated successfully.")
                 .success(true)
                 .body(newSpectrum)

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 @RestController
 @RequestMapping("/data")
-@CrossOrigin(origins = "${client.url}")
+//@CrossOrigin(origins = "${client.url}")
 public class SpectrumDataController {
 
     private SpectrumDataService spectrumDataService;
