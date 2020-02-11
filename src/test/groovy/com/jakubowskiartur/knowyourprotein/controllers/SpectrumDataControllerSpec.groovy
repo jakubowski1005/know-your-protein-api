@@ -6,6 +6,7 @@ import com.jakubowskiartur.knowyourprotein.payloads.ServerResponse
 import com.jakubowskiartur.knowyourprotein.pojos.SpectrumData
 import com.jakubowskiartur.knowyourprotein.services.SpectrumDataService
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
@@ -22,8 +23,6 @@ class SpectrumDataControllerSpec extends Specification {
 
     SpectrumData data1
     SpectrumData data2
-    String json1
-    String json2
 
     void setup() {
         service = Mock(SpectrumDataService)
@@ -32,8 +31,6 @@ class SpectrumDataControllerSpec extends Specification {
 
         data1 = new SpectrumData(1, 'name1', new ArrayList<StructureModel>(), null)
         data2 = new SpectrumData(2, 'name2', new ArrayList<StructureModel>(), null)
-        json1 = mapper.writeValueAsString(data1)
-        json2 = mapper.writeValueAsString(data2)
     }
 
     void 'should return not found response'() {
@@ -55,7 +52,7 @@ class SpectrumDataControllerSpec extends Specification {
     void 'should retrieve data by id'() {
         given:
         ServerResponse response = ServerResponse.builder().http(HttpStatus.OK).message("Resources loaded successfully.").success(true).body(data1).build()
-        service.retrieveByID(1) >> response
+        service.retrieveByID(1L) >> response
         String responseJson = mapper.writeValueAsString(response)
 
         expect:
@@ -79,33 +76,38 @@ class SpectrumDataControllerSpec extends Specification {
                 .andExpect(MockMvcResultMatchers.content().json(responseJson))
     }
 
-    // 'should create data'
     void 'should create data'() {
         given:
-        ServerResponse response = ServerResponse.builder().http(HttpStatus.CREATED)
+        ServerResponse response = ServerResponse.builder()
+                .http(HttpStatus.CREATED)
                 .message("Spectrum data saved successfully.")
                 .success(true)
-                .body(data1).build()
-        service.createSpectrum(data1) >> response
+                .body(data1)
+                .build()
+        service.createSpectrum(_ as SpectrumData) >> response
         String responseJson = mapper.writeValueAsString(response)
+        System.out.println(mapper.writeValueAsString(data1))
+        System.out.println(responseJson)
 
         expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/data/spectras"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        mockMvc.perform(MockMvcRequestBuilders.post("/data/spectras")
+                .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(data1)))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andExpect(MockMvcResultMatchers.content().json(responseJson))
     }
 
     void 'should update data'() {
         given:
-        ServerResponse response = ServerResponse.builder().http(HttpStatus.CREATED)
+        ServerResponse response = ServerResponse.builder().http(HttpStatus.OK)
                 .message("Spectrum data updated successfully.")
                 .success(true)
                 .body(data2).build()
-        service.updateSpectrum(1, data2) >> response
+        service.updateSpectrum(1, _ as SpectrumData) >> response
         String responseJson = mapper.writeValueAsString(response)
 
         expect:
-        mockMvc.perform(MockMvcRequestBuilders.put("/data/spectras"))
+        mockMvc.perform(MockMvcRequestBuilders.put("/data/spectras/1")
+                .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(data2)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(responseJson))
     }

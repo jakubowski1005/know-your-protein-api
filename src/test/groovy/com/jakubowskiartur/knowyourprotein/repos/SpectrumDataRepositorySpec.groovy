@@ -1,5 +1,6 @@
 package com.jakubowskiartur.knowyourprotein.repos
 
+import com.jakubowskiartur.knowyourprotein.computing.pojos.StructureModel
 import com.jakubowskiartur.knowyourprotein.pojos.SpectrumData
 import com.jakubowskiartur.knowyourprotein.pojos.User
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -19,23 +20,23 @@ class SpectrumDataRepositorySpec extends Specification{
     @Inject
     TestEntityManager entityManager
 
-    UUID id
+    Long id
     User user
     List<SpectrumData> spectras
     SpectrumData data1
     SpectrumData data2
 
     void setup() {
-        id = UUID.randomUUID()
+        id = 1L
         user = new User('username', 'email@gmail.com', 'pass1234')
         spectras = new ArrayList<>()
-        data1 = new SpectrumData('uno')
+        data1 = new SpectrumData('uno', new ArrayList<StructureModel>())
         data1.setUser(user)
-        data2 = new SpectrumData('do')
+        data2 = new SpectrumData('do', new ArrayList<StructureModel>())
         data2.setUser(user)
         spectras << data1 << data2
         user.setSpectras(spectras)
-        id = (UUID) entityManager.persistAndGetId(user)
+        id = (Long) entityManager.persistAndGetId(user)
     }
 
     void 'should return all users data by its id'() {

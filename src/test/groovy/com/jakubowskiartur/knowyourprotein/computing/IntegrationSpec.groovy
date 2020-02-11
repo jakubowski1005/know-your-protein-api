@@ -14,7 +14,6 @@ class IntegrationSpec extends Specification {
 
         when:
         double res = Integration.integrate(dataset)
-        System.out.println(res)
 
         then:
         res == 15

@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface SpectrumDataRepository extends JpaRepository<SpectrumData, Long> {
 
-    List<SpectrumData> getAllByUser_Id(String user_id);
+    List<SpectrumData> getAllByUser_Id(Long user_id);
 
     List<SpectrumData> getAllByUser(User user);
 }

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 
 @RestController
-//@CrossOrigin(origins = "${client.url}")
 public class DataIOController {
 
     private SpectrumAnalyzer spectrumAnalyzer;

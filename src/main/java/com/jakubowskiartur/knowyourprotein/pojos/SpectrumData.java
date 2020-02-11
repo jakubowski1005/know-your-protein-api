@@ -5,7 +5,6 @@ import com.jakubowskiartur.knowyourprotein.computing.pojos.StructureModel;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -26,8 +25,6 @@ public class SpectrumData {
     @NonNull
     @OneToMany
     private List<StructureModel> structures;
-
-    private final LocalDate creationDate = LocalDate.now();
 
     @ManyToOne
     @ToString.Exclude
