@@ -1,6 +1,5 @@
 package com.jakubowskiartur.knowyourprotein.security;
 
-import com.jakubowskiartur.knowyourprotein.pojos.User;
 import com.jakubowskiartur.knowyourprotein.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

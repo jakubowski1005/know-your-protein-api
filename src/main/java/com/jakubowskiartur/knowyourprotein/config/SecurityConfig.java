@@ -3,7 +3,6 @@ package com.jakubowskiartur.knowyourprotein.config;
 import com.jakubowskiartur.knowyourprotein.security.AuthFilter;
 import com.jakubowskiartur.knowyourprotein.security.CustomEndpointAuthorization;
 import com.jakubowskiartur.knowyourprotein.security.UnauthorizedResponseAuthenticationEntryPoint;
-import com.jakubowskiartur.knowyourprotein.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -72,7 +71,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/")
                         .permitAll()
-                    .antMatchers("/auth/**")
+                    .antMatchers("/analyze")
+                        .permitAll()
+                    .antMatchers("/auth/signup")
                         .permitAll()
                     .antMatchers("/h2-console/**")
                         .permitAll()
@@ -85,6 +86,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
-
 }

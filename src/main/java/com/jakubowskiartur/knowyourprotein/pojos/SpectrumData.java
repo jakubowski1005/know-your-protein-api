@@ -19,7 +19,6 @@ public class SpectrumData {
     @GeneratedValue
     private Long id;
 
-    @NonNull
     private String name;
 
     @NonNull
