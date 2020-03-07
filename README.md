@@ -2,7 +2,7 @@
 
 ***Know your protein*** is web application that allows secondary structure analysis of proteins based on their infrared spectras.
 
-*This repository is responsible for server-side part of application. Client-side part of the app is available [here](https://github.com/jakubowski1005/know-your-protein-client).*
+*This repository contains server-side part of application. Client-side part of the app is available [here](https://github.com/jakubowski1005/know-your-protein-client).*
 
 
 ## Table of content
@@ -14,26 +14,26 @@
 
 ## Description
 
-This project is my engineer's diploma project. The application would allow user to get content of specific secondary protein structures like alpha-helix or beta-sheet. Data would be calculated from Fourier Transform Infrared Spectroscopy results. Received data could be save in the database or save as PDF document.
+This project is my engineers diploma project. The application allows user to get proportions of specific secondary protein structures like alpha-helix or beta-sheet. Data are calculated by analysing results of Fourier Transform Infrared Spectroscopy. Received data can be saved in the database or can be downloaded as PDF document.
 
-The data would multistage processed:
-- cut out important bands,
+Data analysis stages:
+- cutting out the component band,
 - smoothing and filtration,
 - numerical differentiation,
-- find peeks,
-- fit structures,
+- peak detection,
+- structures fitting,
 - deconvolution,
-- numerical integral
+- numerical integration
 
-Server-side part of application would be responsible for user account handling (authorization and authentication), connecting with database and data processing.
+Server-side application is responsible for user account handling (authorization and authentication), connecting with database and data processing.
 
 
 ## Technologies, tools and libraries ##
 
 - Gradle 
 - Spring Boot 2
-- Spring Security, OAuth2 with JWT
-- Spring JPA and Hibernate
+- Spring Security with JWT
+- Spring Data JPA
 - Spock Framework
 - Lobok
 - PostgreSQL
