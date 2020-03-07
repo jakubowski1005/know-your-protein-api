@@ -35,7 +35,7 @@ Server-side application is responsible for user account handling (authorization 
 - Spring Security with JWT
 - Spring Data JPA
 - Spock Framework
-- Lobok
+- Lombok
 - PostgreSQL
 
 ## Author
